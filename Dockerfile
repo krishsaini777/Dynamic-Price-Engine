@@ -1,5 +1,5 @@
 # Use the official Node.js 18 image as base
-FROM node:18-bullseye-slim
+FROM node:20-bullseye-slim
 
 # Install Python and pip
 RUN apt-get update && apt-get install -y \
@@ -37,7 +37,7 @@ COPY backend/package*.json ./backend/
 
 # Install Node dependencies
 WORKDIR /usr/src/app/backend
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Copy Python requirements
 WORKDIR /usr/src/app
