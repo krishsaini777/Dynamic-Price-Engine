@@ -4,38 +4,36 @@ const { protect } = require('../middleware/auth');
 const { sendSuccess } = require('../utils/apiResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const Settings = require('../models/settings');
+const Product = require('../models/product');
 const { seedDummyDataForUser } = require('../services/seedService');
 
-// ── GET /api/v1/auth/me — return current Firebase user info ─
-// The frontend calls this right after Firebase login.
-// We intercept this to seed dummy data for brand new users.
 router.get('/me', protect, asyncHandler(async (req, res) => {
   const uid = req.user.uid;
 
-  // Check if this user has already been seeded
-  const seeded = await Settings.findOne({ ownerId: uid, key: 'hasSeededDummyData' });
-  
-  if (!seeded) {
-    // Brand new user — seed dummy data so their dashboard isn't empty!
+  const productCount = await Product.countDocuments({ ownerId: uid, isActive: true });
+
+  if (productCount === 0) {
+    await Settings.deleteOne({ ownerId: uid, key: 'hasSeededDummyData' });
     await seedDummyDataForUser(uid);
-    // Mark as seeded so it never runs again for this user
-    await Settings.create({ ownerId: uid, key: 'hasSeededDummyData', value: true });
+    await Settings.updateOne(
+      { ownerId: uid, key: 'hasSeededDummyData' },
+      { $set: { value: true } },
+      { upsert: true },
+    );
   }
 
   sendSuccess(res, req.user);
 }));
 
-// ── POST /api/v1/auth/seed-presentation — force seed rich presentation data ─
 router.post('/seed-presentation', protect, asyncHandler(async (req, res) => {
   const uid = req.user.uid;
   await seedDummyDataForUser(uid);
-  
-  const seeded = await Settings.findOne({ ownerId: uid, key: 'hasSeededDummyData' });
-  if (!seeded) {
-    await Settings.create({ ownerId: uid, key: 'hasSeededDummyData', value: true });
-  }
-
-  sendSuccess(res, { message: 'Presentation data successfully seeded for your account.' });
+  await Settings.updateOne(
+    { ownerId: uid, key: 'hasSeededDummyData' },
+    { $set: { value: true } },
+    { upsert: true },
+  );
+  sendSuccess(res, { message: 'Presentation data seeded successfully.' });
 }));
 
 module.exports = router;
