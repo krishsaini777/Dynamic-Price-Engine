@@ -1,0 +1,60 @@
+{
+  "version": "1.0.20260705",
+  "trained_at": "2026-07-05T14:31:31.186892Z",
+  "training_rows": 4000,
+  "test_rows": 1000,
+  "features": [
+    "cost_price",
+    "current_price",
+    "price_to_cost_ratio",
+    "target_margin",
+    "competitor_median_price",
+    "competitor_gap_pct",
+    "inventory_coverage_days",
+    "available_quantity",
+    "ema_daily_sales",
+    "demand_velocity_ratio",
+    "organic_sales_ratio",
+    "rolling_avg_sales_7d",
+    "day_of_week",
+    "month_of_year",
+    "is_festival_period",
+    "seasonal_multiplier",
+    "is_promotional_event_active",
+    "category_encoded",
+    "tier_encoded"
+  ],
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 3,
+    "learning_rate": 0.1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8
+  },
+  "evaluation": {
+    "mae": 146.3281,
+    "rmse": 203.6411,
+    "r2": 0.9891
+  },
+  "feature_importance": {
+    "current_price": 0.468934,
+    "cost_price": 0.312124,
+    "competitor_median_price": 0.168512,
+    "is_festival_period": 0.009723,
+    "inventory_coverage_days": 0.006578,
+    "tier_encoded": 0.005434,
+    "seasonal_multiplier": 0.005406,
+    "demand_velocity_ratio": 0.004456,
+    "target_margin": 0.003619,
+    "is_promotional_event_active": 0.00341,
+    "price_to_cost_ratio": 0.003119,
+    "available_quantity": 0.001851,
+    "month_of_year": 0.001517,
+    "ema_daily_sales": 0.001343,
+    "competitor_gap_pct": 0.001234,
+    "day_of_week": 0.001131,
+    "rolling_avg_sales_7d": 0.000799,
+    "organic_sales_ratio": 0.000602,
+    "category_encoded": 0.000207
+  }
+}
