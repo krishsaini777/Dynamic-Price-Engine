@@ -25,4 +25,17 @@ router.get('/me', protect, asyncHandler(async (req, res) => {
   sendSuccess(res, req.user);
 }));
 
+// ── POST /api/v1/auth/seed-presentation — force seed rich presentation data ─
+router.post('/seed-presentation', protect, asyncHandler(async (req, res) => {
+  const uid = req.user.uid;
+  await seedDummyDataForUser(uid);
+  
+  const seeded = await Settings.findOne({ ownerId: uid, key: 'hasSeededDummyData' });
+  if (!seeded) {
+    await Settings.create({ ownerId: uid, key: 'hasSeededDummyData', value: true });
+  }
+
+  sendSuccess(res, { message: 'Presentation data successfully seeded for your account.' });
+}));
+
 module.exports = router;
