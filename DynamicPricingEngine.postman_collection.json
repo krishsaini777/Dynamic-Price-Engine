@@ -1,0 +1,226 @@
+{
+  "info": {
+    "name": "Dynamic Pricing Engine API",
+    "description": "Complete Postman collection for the Dynamic Pricing Engine APIs, covering Products, Inventory, Competitors, and Pricing Engine.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Products API",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productName\": \"Wireless Mouse\",\n    \"category\": \"Electronics\",\n    \"currentPrice\": 799,\n    \"basePrice\": 799\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"currentPrice\": 849\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Inventory API",
+      "item": [
+        {
+          "name": "Get Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory"]
+            }
+          }
+        },
+        {
+          "name": "Add Inventory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productId\": \"{{productId}}\",\n    \"availableQuantity\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory"]
+            }
+          }
+        },
+        {
+          "name": "Update Inventory",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"availableQuantity\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/{{inventoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "{{inventoryId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Competitor Pricing API",
+      "item": [
+        {
+          "name": "Get Competitor Prices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/competitor-prices",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "competitor-prices"]
+            }
+          }
+        },
+        {
+          "name": "Add Competitor Price",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productId\": \"{{productId}}\",\n    \"competitorName\": \"Flipkart\",\n    \"competitorPrice\": 749\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/competitor-prices",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "competitor-prices"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Pricing Engine API",
+      "item": [
+        {
+          "name": "Calculate Recommended Price",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productId\": \"{{productId}}\",\n    \"demandScore\": 85\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/calculate-price",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "calculate-price"]
+            }
+          }
+        },
+        {
+          "name": "Get Pricing History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pricing-history?productId={{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pricing-history"],
+              "query": [
+                {
+                  "key": "productId",
+                  "value": "{{productId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "INSERT_OBJECT_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "inventoryId",
+      "value": "INSERT_OBJECT_ID_HERE",
+      "type": "string"
+    }
+  ]
+}
