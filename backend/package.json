@@ -8,6 +8,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "build": "npm install && pip install xgboost numpy pandas scikit-learn",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

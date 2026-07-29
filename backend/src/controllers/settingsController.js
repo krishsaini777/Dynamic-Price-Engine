@@ -23,7 +23,7 @@ const updateSetting = asyncHandler(async (req, res) => {
   const setting = await Settings.findOneAndUpdate(
     { key: req.params.key, ownerId: uid },
     { value },
-    { new: true, runValidators: true, upsert: true }
+    { returnDocument: 'after', runValidators: true, upsert: true }
   );
   sendSuccess(res, setting);
 });
@@ -60,7 +60,7 @@ const toggleSeasonal = asyncHandler(async (req, res) => {
   const setting = await Settings.findOneAndUpdate(
     { key: 'seasonalPricingEnabled', ownerId: uid },
     { value: enabled },
-    { new: true, upsert: true }
+    { returnDocument: 'after', upsert: true }
   );
   sendSuccess(res, { seasonalPricingEnabled: setting.value });
 });
@@ -76,7 +76,7 @@ const updateSeasonalCategories = asyncHandler(async (req, res) => {
   const setting = await Settings.findOneAndUpdate(
     { key: 'seasonalDisabledCategories', ownerId: uid },
     { value: categories },
-    { new: true, upsert: true }
+    { returnDocument: 'after', upsert: true }
   );
   sendSuccess(res, { seasonalDisabledCategories: setting.value });
 });

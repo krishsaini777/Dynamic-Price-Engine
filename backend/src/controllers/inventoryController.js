@@ -116,7 +116,7 @@ const updateInventory = asyncHandler(async (req, res) => {
   const inventory = await Inventory.findOneAndUpdate(
     { productId: req.params.productId },
     updateFields,
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   ).populate('productId', 'productName currentPrice category sku tier');
 
   sendSuccess(res, inventory);

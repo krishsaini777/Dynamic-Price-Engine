@@ -82,7 +82,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   const product = await Product.findOneAndUpdate(
     { _id: req.params.id, ownerId: uid },
     req.body,
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   );
   if (!product) return sendError(res, 'Product not found', 404);
   sendSuccess(res, product);

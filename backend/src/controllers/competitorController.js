@@ -78,7 +78,7 @@ const updateCompetitor = asyncHandler(async (req, res) => {
   const competitor = await CompetitorPrice.findByIdAndUpdate(
     req.params.id,
     { ...req.body, recordedAt: new Date() },
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   );
   sendSuccess(res, competitor);
 });

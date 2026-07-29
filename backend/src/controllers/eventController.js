@@ -60,7 +60,7 @@ const updateEvent = asyncHandler(async (req, res) => {
   // Prevent reassigning ownerId
   delete req.body.ownerId;
 
-  const updated = await PromotionalEvent.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+  const updated = await PromotionalEvent.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after', runValidators: true });
   sendSuccess(res, updated);
 });
 
