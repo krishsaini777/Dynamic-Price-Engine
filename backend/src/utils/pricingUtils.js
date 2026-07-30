@@ -75,7 +75,7 @@ function clamp(value, min, max) {
 
 /**
  * AUTO_APPLY_THRESHOLD — Unified confidence threshold for autonomous price application.
- * Used by both the scheduler and the shouldApply flag in composePriceRecommendation.
+ * Used by the scheduler to determine if a recommended price change can be applied automatically.
  *
  * Design Decision: 0.65 (not 0.5) because with ML in the loop, a price at 50%
  * confidence has too much uncertainty to apply without human review. 0.65 balances
