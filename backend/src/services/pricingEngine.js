@@ -501,66 +501,6 @@ function computeConfidenceScore(demandSignal, inventorySignal, competitorSignal,
   return Math.min(1.0, score); // cap at 1.0
 }
 
-/**
- * composePriceRecommendation — Kept for backward compatibility.
- * Called by pricingController.js in recalculateAll when a product is already
- * loaded. This shim delegates to the new hybrid pipeline.
- *
- * @deprecated Use runPricingEngine directly.
- */
-function composePriceRecommendation({ product, demandSignal, inventorySignal, competitorSignal, seasonalSignal }) {
-  const { currentPrice, costPrice, targetMargin, pricingStrategy } = product;
-
-  const rawMultiplier =
-    demandSignal.multiplier *
-    inventorySignal.multiplier *
-    competitorSignal.multiplier *
-    seasonalSignal.multiplier;
-
-  const maxUp = 1 + (pricingStrategy?.maxIncreasePct || 0.15);
-  const maxDown = 1 - (pricingStrategy?.maxDecreasePct || 0.15);
-  const finalMultiplier = Math.max(maxDown, Math.min(maxUp, rawMultiplier));
-
-  let recommendedPrice = currentPrice * finalMultiplier;
-  let constraintApplied = "NONE";
-
-  const profitFloor = costPrice * (1 + targetMargin);
-  if (recommendedPrice < profitFloor) { recommendedPrice = profitFloor; constraintApplied = "PROFIT_FLOOR"; }
-
-  const priceCeiling = currentPrice * 1.5;
-  if (recommendedPrice > priceCeiling) { recommendedPrice = priceCeiling; constraintApplied = "CEILING"; }
-
-  const changePercent = Math.abs(recommendedPrice - currentPrice) / currentPrice;
-  if (changePercent < 0.01) { recommendedPrice = currentPrice; constraintApplied = "MINIMUM_CHANGE"; }
-
-  recommendedPrice = charmPrice(Math.round(recommendedPrice));
-
-  const confidenceScore = parseFloat(
-    (0.4 * demandSignal.confidence + 0.3 * inventorySignal.confidence + 0.2 * (competitorSignal.confidence || 0) + 0.1 * 1.0).toFixed(2),
-  );
-  const confidenceLevel = confidenceScore >= 0.75 ? "HIGH" : confidenceScore >= 0.5 ? "MEDIUM" : "LOW";
-  const shouldApply = confidenceScore >= AUTO_APPLY_THRESHOLD && constraintApplied !== "MINIMUM_CHANGE";
-
-  const signalList = [
-    { name: "demand",     impact: Math.abs(demandSignal.multiplier - 1) },
-    { name: "inventory",  impact: Math.abs(inventorySignal.multiplier - 1) },
-    { name: "competitor", impact: Math.abs(competitorSignal.multiplier - 1) },
-    { name: "seasonal",   impact: seasonalSignal.phase?.startsWith("disabled") ? 0 : Math.abs(seasonalSignal.multiplier - 1) },
-  ].sort((a, b) => b.impact - a.impact);
-
-  return {
-    rawMultiplier: parseFloat(rawMultiplier.toFixed(4)),
-    finalMultiplier: parseFloat(finalMultiplier.toFixed(4)),
-    recommendedPrice,
-    adjustmentPercent: parseFloat((((recommendedPrice - currentPrice) / currentPrice) * 100).toFixed(2)),
-    confidenceScore,
-    confidenceLevel,
-    shouldApply,
-    constraintApplied,
-    primaryDriver: signalList[0].name,
-  };
-}
-
 module.exports = {
   runPricingEngine,
   // Signal functions exported for featureExtractor.js and direct use in tests
@@ -568,6 +508,5 @@ module.exports = {
   computeInventorySignal,
   computeCompetitorSignal,
   computeSeasonalSignal,
-  composePriceRecommendation,
   computeConfidenceScore,
 };
